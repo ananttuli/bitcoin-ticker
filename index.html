@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
+        crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="./assets/css/main-style.css">
+
+    <script type="text/javascript" src="./assets/js/flot/jquery.js"></script>
+    <script type="text/javascript" src="./assets/js/flot/jquery.flot.js"></script>
+    <script type="text/javascript" src="./assets/js/flot/jquery.flot.time.js"></script>
+    <script type="text/javascript" src="./assets/js/flot/jquery.flot.symbol.js"></script>
+
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script src="./historical.js"></script>
+    <script src="./app.js"></script>
+</head>
+
+<body>
+
+    <div class="container text-center">
+        <h3 class="display-3">Bitcoin Ticker</h3>
+        <input type="checkbox" id="toggle-one" checked data-toggle="toggle" data-onstyle="danger" data-offstyle="primary" data-on="Live"
+            data-off="Historical" data-size="large" data-width="200">
+    </div>
+
+    <div id="live-div">
+
+        <div id="flot-placeholder1" style="width:90%;height:400px;margin:0 auto"></div>
+        <div class="container-fluid text-center">
+            <dl>
+                <h1 class="display-3" id="num"></h1>
+            </dl>
+        </div>
+        <div id="tooltipLive"></div>
+
+    </div>
+
+    <div id="historical-div" class="container-fluid">
+
+
+        <select id="timeDropdown">
+            <option value="1year" selected>1 year</option>
+            <option value="6month">6 months</option>
+            <option value="3month">3 Months</option>
+            <option value="1month">1 Month</option>
+        </select>
+
+
+        <div id="historicalPlot" style="width:1200px;height:400px;margin:0 auto;"></div>
+        <div id="historicalTooltip"></div>
+    </div>
+
+    <script>
+        $("#historical-div").hide();
+        $(function () {
+            $('#toggle-one').bootstrapToggle({
+                on: 'Live',
+                off: 'Historical'
+            });
+        });
+        $('#toggle-one').change(function () {
+
+            if ($(this).prop('checked') == false) {
+                $("#live-div").hide();
+                $("#historical-div").show();
+            } else {
+                $("#live-div").show();
+                $("#historical-div").hide();
+            }
+
+        });
+
+
+    </script>
+
+</body>
+
+</html>
