@@ -7,7 +7,7 @@ body {
 
 
 #tooltipLive{
-	padding:10px;
+	
 	border-style:solid;
 	border-color:black;
 	border-width:2px;
@@ -15,9 +15,19 @@ body {
 	width:200px;
 	margin-left:10%;
 	color:white;
-	background-color: dodgerblue;
+	background-color: #4f4f4f;
 }
-
+#historicalTooltip{
+	border-style:solid;
+	border-color:black;
+	border-width:2px;
+	text-align: center;
+	width:200px;
+	margin-left:10%;
+	color:white;
+	background-color: #4f4f4f;
+	
+}
 .legend table {
 	border-spacing: 5px;
 }
@@ -36,17 +46,6 @@ body {
 	width:1500px;
 }
 
-#historicalTooltip{
-	padding:10px;
-	border-style:solid;
-	border-color:black;
-	border-width:2px;
-	text-align: center;
-	width:200px;
-	margin-left:10%;
-	color:white;
-	background-color: dodgerblue;
-	
-}
+
 
 

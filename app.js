@@ -115,8 +115,8 @@ $(document).ready(function () {
 
 
 function updateNumber(num){
-    console.log(num);
-    $("#num").text(num);
+   
+    $("#num").html('$<strong>'+num+'</strong>');
 }
 
     function getDataFromAPI(currentTime) {
