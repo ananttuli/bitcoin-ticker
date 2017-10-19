@@ -4,9 +4,7 @@
 
 
 function getFormattedTime(v){
-    //console.log('v : ' + v)
         date = new Date(v);
-        //console.log('date' + date);
             var hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
         var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
         var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
@@ -16,11 +14,10 @@ function getFormattedTime(v){
 
 
 $(document).ready(function () {
-    getHistoricalData();
+    getHistoricalData('1year');
     $(function(){
         $("#timeDropdown").change(function(){
             var text = $('#timeDropdown option:selected').val();
-            console.log(text);
             getHistoricalDataTime(text);
     });
     });
@@ -47,16 +44,7 @@ $(document).ready(function () {
             tickSize: [2, "second"],
             tickFormatter: function (v, axis) {
                 var date = new Date(v);
-    
-                // if (date.getSeconds() % 2 == 0) {
-                //     var hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
-                //     var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
-                //     var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
-    
-                //     return hours + ":" + minutes + ":" + seconds;
-                // } else {
                     return "";
-                //}
             },
             axisLabel: "Time",
             axisLabelUseCanvas: true,
@@ -69,11 +57,7 @@ $(document).ready(function () {
             max: 0,        
             tickSize: 10,
             // tickFormatter: function (v, axis) {
-            //     if (v % 10 == 0) {
-            //         return v + "%";
-            //     } else {
-            //         return "";
-            //     }
+            //     
             // },
             axisLabel: "USD/BTC",
             axisLabelUseCanvas: true,
@@ -93,17 +77,9 @@ $(document).ready(function () {
     };
 
     $("#flot-placeholder1").bind("plothover", function (event, pos, item) {
-        
-                    // if ($("#enablePosition:checked").length > 0) {
-                    //     var str = "(" + pos.x.toFixed(2) + ", " + pos.y.toFixed(2) + ")";
-                    //     $("#hoverdata").text(str);
-                    // }
-        
-                    // if ($("#enableTooltip:checked").length > 0) {
                         if (item) {
                             var x = getFormattedTime(item.datapoint[0]),
                                 y = item.datapoint[1].toFixed(2);
-                            //console.log(x+y);
                             $("#tooltipLive").html("Value at " + x + "<br><h3>$" + y+'</h3>')
                                 
                                 .fadeIn(500);
@@ -120,7 +96,6 @@ function updateNumber(num){
 }
 
     function getDataFromAPI(currentTime) {
-        //https://blockchain.info/ticker
         let btcValues;
         $.ajax({
             type: "GET",
@@ -135,11 +110,9 @@ function updateNumber(num){
                 //console.log('error');
             }
         }).done(function () {
-            //callback(expenses);
             
             updateNumber(btcValues['USD']['buy']);
             pushToPlot([currentTime, btcValues['USD']['buy']]);
-            //prnt(btcValues);
         });
     
     }
@@ -150,13 +123,8 @@ function updateNumber(num){
     
     function pushToPlot(dataPoint){
         data.push(dataPoint);
-        //console.log(dataPoint);
-        //console.log(data.shift());
         count++;
-        // console.log('Current max : ' + currentMax);
-        // console.log('Current min : ' + currentMin);
         if(dataPoint[1] > currentMax){
-            //console.log('Data point [1] : ' + dataPoint[1]);
            
             options.yaxis.max = dataPoint[1]+10;
             currentMax = options.yaxis.max;
@@ -172,7 +140,9 @@ function updateNumber(num){
             
             count = 0;
         }
-        //setTimeout(update, updateInterval);
+
+        //setTimeout(getDataFromAPI(), updateInterval) executes the function and waits, then returns to setTimeout
+        //Instead wait for time, then execute the anon function
         setTimeout(function() { getDataFromAPI(now+=updateInterval); },updateInterval);
         
     
@@ -195,11 +165,7 @@ function updateNumber(num){
     $.plot($("#flot-placeholder1"), dataset, options);
 
     function update() {
-        //GetData();
-        //console.log(options);
         $.plot($("#flot-placeholder1"), dataset, options);
-
-        //setTimeout(update, updateInterval);
     }
 
     
