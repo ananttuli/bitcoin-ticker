@@ -1,0 +1,27 @@
+{
+  "name": "bitcoin-ticker",
+  "version": "1.0.0",
+  "description": "A quick project written in ES6 to retrieve and plot live USD/BTC data as well as historical data (1 year, 6 months, 3 months and 1 month)",
+  "main": "app.js",
+  "dependencies": {
+    "babel-cli": "^6.26.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "uglify-js": "^3.1.4"
+  },
+  "scripts": {
+    "build": "babel --presets es2015 app.js --out-file app.bundled.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ananttuli/bitcoin-ticker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ananttuli/bitcoin-ticker/issues"
+  },
+  "homepage": "https://github.com/ananttuli/bitcoin-ticker#readme"
+}
