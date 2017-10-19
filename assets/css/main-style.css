@@ -7,23 +7,24 @@ body {
 
 
 #tooltipLive{
-	
+	position:absolute;
+	display:none;
 	border-style:solid;
 	border-color:black;
 	border-width:2px;
 	text-align: center;
 	width:200px;
-	margin-left:10%;
 	color:white;
 	background-color: #4f4f4f;
 }
 #historicalTooltip{
+	position:absolute;
+	display:none;
 	border-style:solid;
 	border-color:black;
 	border-width:2px;
 	text-align: center;
 	width:200px;
-	margin-left:10%;
 	color:white;
 	background-color: #4f4f4f;
 	

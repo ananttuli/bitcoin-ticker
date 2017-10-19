@@ -24,9 +24,15 @@ class BTCApp {
             if (item) {
                 var x = getFormattedTime(item.datapoint[0]),
                     y = item.datapoint[1].toFixed(2);
+                   
                 $("#tooltipLive").html("Value at " + x + "<br><h3>$" + y + '</h3>')
-
+                    .css("left",(pos.pageX+2)+'px')
+                    .css("top", (pos.pageY+2)+'px')
                     .fadeIn(500);
+                // document.querySelector("#tooltipLive").left = pos.pageX + 'px';  
+                // console.log( 'left :' +document.querySelector("#tooltipLive").left)
+                // document.querySelector("#tooltipLive").top = pos.pageY + 'px';  
+               
             } else {
                 $("#tooltipLive").hide();
             }

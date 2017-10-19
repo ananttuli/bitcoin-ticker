@@ -62,9 +62,10 @@ var drawHistoricalPlot = function () {
                     x = new Date(x);
                     var date = new Date(x);
                     x = date.getDate() + '/' + date.getMonth() + '/' + date.getFullYear();
-                    $("#historicalTooltip").html(item.series.label + " Value on " + x + "<br><h3>$" + y + '</h3>')
-
-                        .fadeIn(500);
+                    $("#historicalTooltip").html(" Value on " + x + "<br><h3>$" + y + '</h3>')
+                        .css("left",(pos.pageX+2)+'px')
+                        .css("top", (pos.pageY+2)+'px')
+                        .fadeIn(100);
                 } else {
                     $("#historicalTooltip").hide();
                 }
