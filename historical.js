@@ -1,5 +1,13 @@
 var historicalData = [];
 
+function  setupHistoricalEventListeners(){
+
+}
+function drawHistoricalPlot(){
+    getHistoricalDataTime('1year');
+    
+    setupHistoricalEventListeners();
+}
 function getHistoricalDataTime(time) {
     let btcHistoricalValues;
     var today = new Date();
@@ -51,12 +59,26 @@ function getHistoricalDataTime(time) {
         method: 'get'
     }).then(function (response) { return response.json(); })
         .then(function (data) {
+            btcApp.historicalData
             plotHistoricalData(data);
         });
 
 }
 
-function calculateMaximum(data) {
+function calculateHistoricalLimits(data){
+    let max = 0, min = Number.MAX_VALUE;
+    for (let i = 0; i < data.length; i++) {
+
+        if (data[i][1] > max) {
+            max = data[i][1];
+        }
+        if (data[i][1] < min) {
+            min = data[i][1];
+        }
+    }
+    return [min,max];    
+}
+function calculateHistoricalMaximum(data) {
     let max = 0;
     for (let i = 0; i < data.length; i++) {
 
@@ -67,8 +89,8 @@ function calculateMaximum(data) {
     return max;
 }
 
-function calculateMinimum(data) {
-    let min = 9999999;
+function calculateHistoricalMinimum(data) {
+    let min = Number.MAX_VALUE;
     for (let i = 0; i < data.length; i++) {
         if (data[i][1] < min) {
             min = data[i][1];
@@ -76,9 +98,7 @@ function calculateMinimum(data) {
     }
     return min;
 }
-
-function plotHistoricalData(data) {
-    historicalData = [];
+function storeResult(data){
     for (var k in data.bpi) {
         var fldate = k.split('-');
         var yr = parseInt(fldate[0]);
@@ -89,9 +109,55 @@ function plotHistoricalData(data) {
 
         historicalData.push([newDate, data.bpi[k]]);
     }
+}
 
-    var chartMin = calculateMinimum(historicalData);
-    var chartMax = calculateMaximum(historicalData);
+function getInitHistoricalOptions(){
+    let historicalOptions = {
+        series: {
+            lines: {
+                show: true,
+                fill: true
+            },
+            points: {
+                show: false
+            }
+        },
+        grid: {
+            hoverable: true,
+            clickable: true
+        },
+        xaxis: {
+            mode: "time",
+            tickSize: [1, "day"],
+            tickColor: "#FFFFFF",
+            tickFormatter: function (v, axis) {
+                return "";
+            },
+            axisLabel: "Time",
+
+            axisLabelUseCanvas: true,
+            axisLabelFontSizePixels: 12,
+            // axisLabelFontFamily: 'Verdana, Arial',
+            //axisLabelPadding: 10
+        },
+        yaxis: {
+            min: chartMin + 30,
+            max: chartMax - 30,
+            axisLabelUseCanvas: true,
+            tickColor: "#FFFFFF"
+        }
+
+    };
+
+    return historicalOptions;
+}
+function plotHistoricalData(data) {
+    storeResult(data);
+    historicalData = [];
+
+
+    var chartMin = calculateHistoricalMinimum(historicalData);
+    var chartMax = calculateHistoricalMaximum(historicalData);
     $(function () {
 
         var dataset;

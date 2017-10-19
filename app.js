@@ -12,10 +12,11 @@ class BTCApp {
         this.count = 0;
         this.currentMax = 0;
         this.currentMin = Number.MAX_VALUE;
+        this.historicalData = [];
 
     }
 
-    setEventListeners() {
+    setLiveEventListeners() {
         $("#flot-placeholder1").bind("plothover", function (event, pos, item) {
             if (item) {
                 var x = getFormattedTime(item.datapoint[0]),
@@ -50,42 +51,46 @@ class BTCApp {
                 //console.log('error');
             }
         }).done(function () {
-
-            updateNumber(btcValues['USD']['buy']);
+            updatePriceView(btcValues['USD']['buy']);
+            //updateNumber(btcValues['USD']['buy']);
             pushToPlot([currentTime, btcValues['USD']['buy']]);
         });
 
     }
     GetData() {
-        data.shift();
-        getDataFromAPI(now += updateInterval);
+        let now = new Date().getTime();
+        getDataFromAPI(now += this.updateInterval);
     }
-
+    updatePlotRange(dataPoint){
+        if (dataPoint[1] > this.currentMax) {
+            
+                        this.options.yaxis.max = dataPoint[1] + 10;
+                        this.currentMax = this.options.yaxis.max;
+                    } else if (dataPoint[1] < this.currentMin) {
+                        this.options.yaxis.min = dataPoint[1] - 10;
+                        this.currentMin = options.yaxis.min;
+                    }
+    }
     pushToPlot(dataPoint) {
-        data.push(dataPoint);
-        count++;
-        if (dataPoint[1] > currentMax) {
-
-            options.yaxis.max = dataPoint[1] + 10;
-            currentMax = options.yaxis.max;
-        } else if (dataPoint[1] < currentMin) {
-            options.yaxis.min = dataPoint[1] - 10;
-            currentMin = options.yaxis.min;
-        }
-
-
+        this.data.push(dataPoint);
+        this.count++;
+        updatePlotRange(dataPoint);
         update();
-        if (count > totalPoints) {
-            data.shift();
+        if (this.count > this.totalPoints) {
+            this.data.shift();
 
-            count = 0;
+            this.count = 0;
         }
 
         //setTimeout(getDataFromAPI(), updateInterval) executes the function and waits, then returns to setTimeout
         //Instead wait for time, then execute the anon function
-        setTimeout(function () { getDataFromAPI(now += updateInterval); }, updateInterval);
+        setTimeout(function () { getDataFromAPI(now += updateInterval); }, this.updateInterval);
 
 
+    }
+
+    update() {
+        $.plot($("#flot-placeholder1"), this.dataset, this.options);
     }
 
     updatePriceView(price){
@@ -93,10 +98,22 @@ class BTCApp {
 
     }
     initApp() {
-        setEventListeners();
-        getHistoricalData('1year');
+        setLiveEventListeners();
+        drawHistoricalPlot();
+        //getHistoricalData('1year');
+        GetData();
     }
 }
+
+$(document).ready(function () {
+    let initUpdateInterval = 1000;
+    let initTotalPoints = 50;
+    var btcApp = new BTCApp(initUpdateInterval, initTotalPoints, getInitOptions());
+    btcApp.initApp();
+
+
+});
+
 
 /**
  * UTILITY FUNCTIONS
