@@ -1,17 +1,19 @@
-var historicalData = [];
-
+/**
+ * DRAW PLOT WITH HISTORICAL DATA
+ */
 var drawHistoricalPlot = function () {
     //-------CALLS--------
+    let chartMin, chartMax;
+    var historicalData = [];
     fetchHistoricalData('1year');
     setupHistoricalEventListeners();
 
     //----DEFINITIONS----------
-    function setupHistoricalEventListeners(){
+    function setupHistoricalEventListeners() {
         $(function () {
             $("#timeDropdown").change(function () {
                 var text = $('#timeDropdown option:selected').val();
                 fetchHistoricalData(text);
-                //getHistoricalDataTime(text);
             });
         });
     }
@@ -21,40 +23,38 @@ var drawHistoricalPlot = function () {
         [start, end] = buildDateParams(time);
         // url (required), options (optional)
         //Date format yyyy-mm-day
-    
+
         //JavaScript fetch API
         fetch('https://api.coindesk.com/v1/bpi/historical/close.json?start=' + start + '&end=' + end, {
             method: 'get'
         }).then(function (response) { return response.json(); })
             .then(function (data) {
-                
+
                 plotHistoricalData(data);
             });
-    
+
     }
 
     function plotHistoricalData(data) {
         historicalData = [];
         storeResult(data);
-        
-    
-        let chartMinimum, chartMaximum;
-        [chartMinimum, chartMaximum] = calculateHistoricalLimits(historicalData);
-        var chartMin = calculateHistoricalMinimum(historicalData);
-        var chartMax = calculateHistoricalMaximum(historicalData);
+
+
+
+        [chartMin, chartMax] = calculateHistoricalLimits(historicalData);
         $(function () {
-    
+
             var dataset;
             dataset = [
                 { label: "USD/BTC", data: historicalData, color: "#00FF00" }
             ];
-    
-    
-    
+
+
+
             $.plot("#historicalPlot", dataset, getInitHistoricalOptions());
-    
-    
-    
+
+
+
             $("#historicalPlot").bind("plothover", function (event, pos, item) {
                 if (item) {
                     var x = item.datapoint[0],
@@ -63,20 +63,20 @@ var drawHistoricalPlot = function () {
                     var date = new Date(x);
                     x = date.getDate() + '/' + date.getMonth() + '/' + date.getFullYear();
                     $("#historicalTooltip").html(item.series.label + " Value on " + x + "<br><h3>$" + y + '</h3>')
-    
+
                         .fadeIn(500);
                 } else {
                     $("#historicalTooltip").hide();
                 }
-    
+
             });
-    
+
         });
-    
+
     }
-/**
- * UTILITY FUNCTIONS
- */
+    /**
+     * UTILITY FUNCTIONS
+     */
 
     function buildDateParams(time) {
         var today = new Date();
@@ -158,7 +158,7 @@ var drawHistoricalPlot = function () {
     function calculateHistoricalLimits(data) {
         let max = 0, min = Number.MAX_VALUE;
         for (let i = 0; i < data.length; i++) {
-    
+
             if (data[i][1] > max) {
                 max = data[i][1];
             }
@@ -175,13 +175,13 @@ var drawHistoricalPlot = function () {
             var yr = parseInt(fldate[0]);
             var mnth = parseInt(fldate[1]);
             var dt = parseInt(fldate[2]);
-    
+
             var newDate = new Date(yr, mnth - 1, dt, 0, 0, 0, 0);
-    
+
             historicalData.push([newDate, data.bpi[k]]);
         }
     }
-    
+
 
     function getInitHistoricalOptions() {
         let historicalOptions = {
@@ -206,7 +206,7 @@ var drawHistoricalPlot = function () {
                     return "";
                 },
                 axisLabel: "Time",
-    
+
                 axisLabelUseCanvas: true,
                 axisLabelFontSizePixels: 12,
                 // axisLabelFontFamily: 'Verdana, Arial',
@@ -218,42 +218,9 @@ var drawHistoricalPlot = function () {
                 axisLabelUseCanvas: true,
                 tickColor: "#FFFFFF"
             }
-    
+
         };
-    
+
         return historicalOptions;
     }
 };
-
-//---------------
-
-
-
-
-
-
-
-
-
-
-// function calculateHistoricalMaximum(data) {
-//     let max = 0;
-//     for (let i = 0; i < data.length; i++) {
-
-//         if (data[i][1] > max) {
-//             max = data[i][1];
-//         }
-//     }
-//     return max;
-// }
-
-// function calculateHistoricalMinimum(data) {
-//     let min = Number.MAX_VALUE;
-//     for (let i = 0; i < data.length; i++) {
-//         if (data[i][1] < min) {
-//             min = data[i][1];
-//         }
-//     }
-//     return min;
-// }
-
